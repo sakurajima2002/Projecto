@@ -1,0 +1,72 @@
+{% extends 'App/base.html' %}
+
+{% load humanize %}
+{% load static %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+
+  {% if productos %}
+  <section  class="mx-auto">
+    <table class="mb-2 shadow-lg bg-white mt-2 mx-auto">
+        <tr>
+          <th class="bg-blue-100 border text-left px-8 py-4">NOMBRE PRODUCTO</th>
+          <th class="bg-blue-100 border text-left px-8 py-4">PRECIO</th>
+          <th class="bg-blue-100 border text-left px-8 py-4">CANTIDAD</th>
+          <th class="bg-blue-100 border text-left px-8 py-4">CATEGORIA</th>
+          <th class="bg-blue-100 border text-left px-8 py-4">EDITAR</th>
+          <th class="bg-blue-100 border text-left px-8 py-4">BORRAR</th>
+        </tr>
+        {% for producto in productos %}
+            <tr>
+                <td class="border px-8 py-4">{{producto.nombre_producto}}</td>
+                <td class="border px-8 py-4">{{producto.precio_producto|intcomma}}</td>
+                <td class="border px-8 py-4">{{producto.cantidad_producto}}</td>
+                <td class="border px-8 py-4">
+                  {% for categoria in producto.categoria.all%}
+                    {{categoria.nombre}}
+                  {% endfor %}
+                </td>
+                <td class="border px-8 py-4">
+                  <a class="mx-auto py-2 px-4 block whitespace-no-wrap" href="{% url 'EditarProducto' producto.id %}">
+                    <span class="material-symbols-outlined">
+                      edit
+                    </span>
+                  </a>
+                </td>
+                <td class="border px-8 py-4">
+                  <a class="mx-auto py-2 px-4 block whitespace-no-wrap" href="{% url 'EliminarProducto' producto.id %}">
+                    <span class="material-symbols-outlined">
+                      delete
+                    </span>
+                  </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+  </section>
+      {% else %}
+      <section class="mx-auto">
+        <div class="mb-2 bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md mt-2 mx-2" role="alert">
+          <div class="flex">
+            <div class="py-1"><svg class="fill-current h-6 w-6 text-teal-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
+            <div>
+              <p class="font-bold">No existe Información aún!</p>
+              <p class="text-sm">Puede crear inventario desde el panel administracíon</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    {% endif %}
+
+{% else %}
+<section  class="mx-auto">
+  <div class="m-10 lg:m-20 text-center rounded bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert">
+    <p class="font-bold">Debe Iniciar Sesión</p>
+    <p class="text-sm">Para poder ver su inventario inicie sesión con su cuenta</p>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

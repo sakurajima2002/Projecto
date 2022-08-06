@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DJANGO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="{% static '/Plantilla/css/styles.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+</head>
+<body class="bg-gray-500" style="display: flex;min-height:100vh; flex-wrap: wrap;">
+
+    <nav class="nav flex items-center justify-between flex-wrap bg-gray-800 p-6" style="width: 100%;height: 10%;">
+        <div class="block lg:hidden">
+          <button id='boton' class="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
+            <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+          </button>
+        </div>
+        <div id='menu' class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+          <div class="text-sm lg:flex-grow">
+            <a href="{% url 'Home' %}" class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-teal-500 mr-4">
+              INICIO
+            </a>
+            <a href="{% url 'Inventario' %}" class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-teal-500 mr-4">
+              INVENTARIO
+            </a>
+            {% if user.is_authenticated %}
+              {% if categorias %}
+                <div class="dropdown inline-block relative mt-4 lg:mt-0">
+                  <button class="bg-white font-semibold py-2 px-4 rounded inline-flex items-center">
+                    <span class="mr-1">CATEGORIAS</span>
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/> </svg>
+                  </button>
+                  <ul class="dropdown-menu absolute hidden text-gray-700 pt-1">
+                      <li class="">
+                        {% for categoria in categorias %}
+                        <a class="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="{% url 'Categorias' categoria.id %}">
+                          {{categoria.nombre}}
+                        </a>
+                        {% endfor %}
+                      </li>
+                      <li class="">
+                        <a class="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="{% url 'ListaCategorias' %}">
+                          Lista Categorias
+                        </a>
+                      </li>
+                  </ul>
+                </div>
+              {% endif %}
+              <div class="dropdown inline-block relative mt-4 lg:mt-0 ml-2">
+                <button class="bg-blue-400 font-semibold py-2 px-4 rounded inline-flex items-center">
+                  <span class="mr-1">AGREGAR</span>
+                  <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/> </svg>
+                </button>
+                <ul class="dropdown-menu absolute hidden text-gray-700 pt-1">
+                    <li class="">
+                      <a class="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="{% url 'AgregarProducto' %}">
+                        Agregar Producto
+                      </a>
+                    </li>
+                    <li class="">
+                      <a class="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="{% url 'AgregarCategoria' %}">
+                        Agregar Categoria
+                      </a>
+                    </li>
+                </ul>
+              </div>
+            {% endif %}
+          </div>
+          {% if user.is_authenticated %}
+              <a href="{% url 'admin:index' %}" class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0 mr-2">
+                {{ user.username }}
+              </a>
+              <a href="{% url 'cerrar_session' %}" class="bg-teal-600 inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-teal-500 hover:text-teal-500 hover:bg-teal-600 mt-4 lg:mt-0">
+                CERRAR SESION
+              </a>
+            </div>
+          {% else %}
+          <a href="{% url 'Login' %}" class="bg-teal-600 inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-teal-500 hover:text-teal-500 hover:bg-teal-600 mt-4 lg:mt-0">
+            INICIAR SESION
+          </a>
+          {% endif %}
+        </div>
+      </nav>
+
+      {% block content %}
+      {% endblock %}
+
+      
+        <footer class="bg-gray-900 text-center lg:text-left" style="align-self: flex-end;width: 100%;">
+          <div class="text-white text-center p-4" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2022 Copyright:
+            <a class="text-white" href="https://tailwind-elements.com/">Tailwind Elements</a>
+          </div>
+        </footer>
+    <script src="{% static 'Plantilla/js/app.js'%}"></script>
+</body>
+</html>
